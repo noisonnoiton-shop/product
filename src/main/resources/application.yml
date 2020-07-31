@@ -1,0 +1,66 @@
+server:
+  port: 8184
+
+domain:
+  category:
+    name: category
+  product:
+    name: product
+
+spring:
+  application:
+    name: awesome-product-service
+  datasource:
+    platform: h2
+    url: jdbc:h2:mem:testdb;
+    username: sa
+    password: null
+    driver-class-name: org.h2.Driver
+    initialization-mode: always
+  h2:
+    console:
+      enabled: true
+  cloud:
+    stream:
+      binders:
+        rabbitmq:
+          type: rabbit
+          environment:
+            spring:
+              rabbitmq:
+                host: 34.211.184.139
+                port: 5672
+                username: labs
+                password: awesome-rabbitmq
+      bindings:
+        orderCreated:
+          destination: orderExchange
+          group: product.orderCreated
+          content-type: application/json
+        orderCanceled:
+          destination: orderExchange
+          group: product.orderCanceled
+          content-type: application/json
+        ProductOutput:
+          destination: productExchange
+          content-type: application/json
+      rabbit:
+        bindings:
+          orderCreated:
+            consumer:
+              autoBindDlq: true
+              bindingRoutingKey: order.OrderCreated.#
+          orderCanceled:
+            consumer:
+              autoBindDlq: true
+              bindingRoutingKey: order.OrderCanceled.#
+          ProductOutput:
+            producer:
+              routing-key-expression: headers['routeTo']
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - "*"
