@@ -4,7 +4,7 @@
 <mapper namespace="com.skcc.category.repository.CategoryMapper">
 
 	<select id="findAll" resultType="com.skcc.category.domain.Category">
-		select * from categories where active = "active" order by priority
+		select * from categories where active = 'active' order by priority
 	</select>
 	
 </mapper>
