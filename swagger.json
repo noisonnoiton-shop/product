@@ -1,0 +1,469 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "product API",
+    "version": "1.0",
+    "title": "product",
+    "termsOfService": "urn:tos",
+    "contact": {
+      
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "localhost:8184",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "category-controller",
+      "description": "Category Controller"
+    },
+    {
+      "name": "product-controller",
+      "description": "Product Controller"
+    }
+  ],
+  "paths": {
+    "/v1/categories": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/categories",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "category-controller"
+        ],
+        "summary": "getCategories",
+        "operationId": "getCategoriesUsingGET",
+
+        "parameters": [
+          {
+            "name": "X-TXID",
+            "in": "header",
+            "description": "X-TXID",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Category"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/products": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/products",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "product-controller"
+        ],
+        "summary": "getAllProducts",
+        "operationId": "getAllProductsUsingGET",
+
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/products/category/{categoryId}": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/products/category/{categoryId}",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "product-controller"
+        ],
+        "summary": "findByCategoryId",
+        "operationId": "findByCategoryIdUsingGET",
+
+        "parameters": [
+          {
+            "name": "categoryId",
+            "in": "path",
+            "description": "categoryId",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/products/events": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/products/events",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "product-controller"
+        ],
+        "summary": "getProductEvent",
+        "operationId": "getProductEventUsingGET",
+
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductEvent"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/products/sale": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/products/sale",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "product-controller"
+        ],
+        "summary": "findByCategoryId",
+        "operationId": "findByCategoryIdUsingGET_1",
+
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Product"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/v1/products/{id}": {
+      "get": {
+        "x-amazon-apigateway-integration": {
+          "responses": {
+            "default": {
+              "statusCode": "200"
+            }
+          },
+          "uri": "http://a1001c0e806a748679deb2115e1930bf-0f412fe779c96488.elb.ap-northeast-2.amazonaws.com/v1/products/{id}",
+          "passthroughBehavior": "when_no_match",
+          "connectionType": "VPC_LINK",
+          "connectionId": "vwdm61",
+          "httpMethod": "GET",
+          "type": "http_proxy"
+        },
+        "tags": [
+          "product-controller"
+        ],
+        "summary": "findById",
+        "operationId": "findByIdUsingGET",
+
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/Product"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "definitions": {
+    "Category": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Category"
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "img": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "originalPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "resultPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "salePercentage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "salePrice": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "Product"
+    },
+    "ProductEvent": {
+      "type": "object",
+      "properties": {
+        "createdAt": {
+          "type": "string"
+        },
+        "domain": {
+          "type": "string"
+        },
+        "eventType": {
+          "type": "string",
+          "enum": [
+            "ProductSoldOut",
+            "ProductAmountAdded",
+            "ProductAmountSubtracted",
+            "ProductSoldOutFailed",
+            "ProductAmountAddFailed",
+            "ProductAmountSubtractFailed"
+          ]
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "payload": {
+          "$ref": "#/definitions/ProductPayload"
+        },
+        "productId": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "txId": {
+          "type": "string"
+        }
+      },
+      "title": "ProductEvent"
+    },
+    "ProductPayload": {
+      "type": "object",
+      "properties": {
+        "active": {
+          "type": "string"
+        },
+        "amount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "categoryName": {
+          "type": "string"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "img": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "originalPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "resultPrice": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "salePercentage": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "salePrice": {
+          "type": "integer",
+          "format": "int64"
+        }
+      },
+      "title": "ProductPayload"
+    }
+  }
+}
