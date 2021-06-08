@@ -4,14 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.esotericsoftware.minlog.Log;
 import com.skcc.order.domain.OrderProduct;
 import com.skcc.order.event.message.OrderEvent;
 import com.skcc.product.domain.Product;
@@ -20,6 +12,13 @@ import com.skcc.product.event.message.ProductEventType;
 import com.skcc.product.event.message.ProductPayload;
 import com.skcc.product.publish.ProductPublish;
 import com.skcc.product.repository.ProductMapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ProductService {
@@ -194,7 +193,7 @@ public class ProductService {
 	}
 	
 	public ProductEvent convertProductToProductEvent(String txId, long id, ProductEventType productEventType) {
-		Log.info("in service txId : {}", txId);
+		log.info("in service txId : {}", txId);
 		
 		Product product = this.productMapper.findById(id);
 		
@@ -209,7 +208,7 @@ public class ProductService {
 		productEvent.setTxId(txId);
 		productEvent.setCreatedAt(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
 		
-		Log.info("in service productEvent : {}", productEvent.toString());
+		log.info("in service productEvent : {}", productEvent.toString());
 		
 		return productEvent;
 	}
