@@ -25,7 +25,7 @@ public class CategoryController {
 	}
 	
 	@GetMapping(value="/categories")
-	public List<Category> getCategories(@RequestHeader("X-TXID") String txId){
-		return categoryService.findAll(txId);
+	public List<Category> getCategories(){
+		return categoryService.findAll();
 	}
 }

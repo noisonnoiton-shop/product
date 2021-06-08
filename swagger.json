@@ -47,15 +47,7 @@
         "summary": "getCategories",
         "operationId": "getCategoriesUsingGET",
 
-        "parameters": [
-          {
-            "name": "X-TXID",
-            "in": "header",
-            "description": "X-TXID",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OK",

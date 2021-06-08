@@ -18,7 +18,7 @@ public class CategoryService {
 		this.categoryMapper = categoryMapper;
 	}
 	
-	public List<Category> findAll(String txId) {
+	public List<Category> findAll() {
 		return this.categoryMapper.findAll();
 	}
 }
