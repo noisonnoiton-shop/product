@@ -54,7 +54,7 @@
 	</insert>
 	
 	<select id="getProductEventId" resultType="long">
-		select ${sequence-nextval}
+		select ${event-nextval}
 	</select>
 	
 	<select id="findProductEvent" resultMap="ProductEvent">

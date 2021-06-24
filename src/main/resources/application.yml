@@ -7,7 +7,8 @@ domain:
   product:
     name: product
 
-sequence-nextval: nextval(event_seq)
+mybatis:
+  config-location: mybatis-config-h2.xml
 
 spring:
   application:
