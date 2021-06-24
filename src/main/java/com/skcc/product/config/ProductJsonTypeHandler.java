@@ -36,13 +36,13 @@ public class ProductJsonTypeHandler extends BaseTypeHandler<Object>{
 	@Override
 	public Product getNullableResult(ResultSet rs, String columnName) throws SQLException {
 		
-		Clob d = (Clob) rs.getObject(columnName);
+		String d = (String) rs.getObject(columnName);
 		if(d == null) return null;
 
 		Product cp = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			cp = objectMapper.readValue(d.getSubString(1, (int) d.length()), Product.class);
+			cp = objectMapper.readValue(d, Product.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

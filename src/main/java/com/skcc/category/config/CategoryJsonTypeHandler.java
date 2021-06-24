@@ -36,13 +36,13 @@ public class CategoryJsonTypeHandler extends BaseTypeHandler<Object>{
 	@Override
 	public Category getNullableResult(ResultSet rs, String columnName) throws SQLException {
 		
-		Clob d = (Clob) rs.getObject(columnName);
+		String d = (String) rs.getObject(columnName);
 		if(d == null) return null;
 
 		Category cp = null;
 		ObjectMapper objectMapper = new ObjectMapper();
 		try {
-			cp = objectMapper.readValue(d.getSubString(1, (int) d.length()), Category.class);
+			cp = objectMapper.readValue(d, Category.class);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {

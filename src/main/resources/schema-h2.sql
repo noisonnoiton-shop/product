@@ -1,4 +1,5 @@
 --sequence
+drop sequence if EXISTS event_seq;
 create sequence event_seq;
 
 -- products
@@ -25,7 +26,7 @@ CREATE TABLE product_events (
   ,domain varchar(255) NOT NULL
   ,productId bigint  NOT NULL
   ,eventType varchar(255)  NOT NULL
-  ,payload text NOT NULL
+  ,payload longvarchar NOT NULL
   ,txId varchar(255)  NOT NULL
   ,createdAt datetime NOT NULL
   ,PRIMARY KEY (`id`)
@@ -49,7 +50,7 @@ CREATE TABLE category_events (
   ,domain varchar(255) NOT NULL
   ,categoryId bigint  NOT NULL
   ,eventType varchar(255)  NOT NULL
-  ,payload text NOT NULL
+  ,payload longvarchar NOT NULL
   ,txId varchar(255)  NOT NULL
   ,createdAt datetime NOT NULL
   ,PRIMARY KEY (`id`)
