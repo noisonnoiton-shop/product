@@ -1,72 +1,39 @@
 package com.skcc.category.domain;
 
-//@Data
-//@NoArgsConstructor
-//@AllArgsConstructor
-//@ToString
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import org.hibernate.annotations.CreationTimestamp;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
 public class Category {
-	
-	private long id;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column
 	private String name;
-	private long priority;
+
+	@Column
+	private Long priority;
+
+	@Column(length = 255)
 	private String active;
-	private String createdAt;
-
-	public Category(long id, String name, long priority, String active, String createdAt) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.priority = priority;
-		this.active = active;
-		this.createdAt = createdAt;
-	}
-
-	public Category() {}
-
-	public long getId() {
-		return id;
-	}
-
-	public String getActive() {
-		return active;
-	}
-
-	public void setActive(String active) {
-		this.active = active;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getCreatedAt() {
-		return createdAt;
-	}
-
-	public void setCreatedAt(String createdAt) {
-		this.createdAt = createdAt;
-	}
-
-	public long getPriority() {
-		return priority;
-	}
-
-	public void setPriority(long priority) {
-		this.priority = priority;
-	}
-
-	@Override
-	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", priority=" + priority + ", active=" + active
-				+ ", createdAt=" + createdAt + "]";
-	}
 	
+	@Column
+	@CreationTimestamp
+	private LocalDateTime createdAt;
 }

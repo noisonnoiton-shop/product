@@ -2,19 +2,18 @@ package com.skcc.product.config;
 
 import java.io.IOException;
 import java.sql.CallableStatement;
-import java.sql.Clob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import org.apache.ibatis.type.BaseTypeHandler;
-import org.apache.ibatis.type.JdbcType;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.skcc.product.event.message.ProductPayload;
+
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
 
 public class ProductPayloadJsonTypeHandler extends BaseTypeHandler<Object>{
 
@@ -52,22 +51,6 @@ public class ProductPayloadJsonTypeHandler extends BaseTypeHandler<Object>{
 		}
 		
 		return cp;
-//		Object d = rs.getObject(columnName);
-//		if(d == null) return null;
-//		
-//		List<ProductPayload> cps = null;
-//		ObjectMapper objectMapper = new ObjectMapper();
-//		try {
-//			cps = objectMapper.readValue(d.toString(), new TypeReference<List<ProductPayload>>() {});
-//		} catch (JsonParseException e) {
-//			e.printStackTrace();
-//		} catch (JsonMappingException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		
-//		return cps;
 		
 	}
 

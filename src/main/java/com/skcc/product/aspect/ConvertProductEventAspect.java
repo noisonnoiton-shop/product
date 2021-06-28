@@ -10,8 +10,6 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -19,8 +17,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Aspect
 @Component
 public class ConvertProductEventAspect {
-	
-	private static final Logger log = LoggerFactory.getLogger(ConvertProductEventAspect.class);
 
 	@Pointcut("execution(* com.skcc.*.service.*.convertProductToProductEvent(..))")
 	public void convertProductToProductEvent() {}

@@ -1,5 +1,8 @@
 package com.skcc.category.event.message;
 
-public interface CategoryEventType {
-
+public enum CategoryEventType {
+	CategoryCreated
+	,CategoryEdited
+	,CategoryCreateFailed
+	,CategoryEditFailed
 }

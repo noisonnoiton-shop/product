@@ -1,7 +1,6 @@
 package com.skcc.product.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.skcc.order.domain.OrderProduct;
@@ -11,7 +10,8 @@ import com.skcc.product.event.message.ProductEvent;
 import com.skcc.product.event.message.ProductEventType;
 import com.skcc.product.event.message.ProductPayload;
 import com.skcc.product.publish.ProductPublish;
-import com.skcc.product.repository.ProductMapper;
+import com.skcc.product.repository.ProductEventRepository;
+import com.skcc.product.repository.ProductRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
 
-	private ProductMapper productMapper;
+	// @Autowired
+	// private ProductMapper productMapper;
+
+	private ProductRepository productRepository;
+	private ProductEventRepository productEventRepository;
 	private ProductPublish productPublish;
 	
 	@Autowired
@@ -35,26 +39,30 @@ public class ProductService {
 	String domain;
 	
 	@Autowired
-	public ProductService(ProductMapper productMapper, ProductPublish productPublish) {
-		this.productMapper = productMapper;
+	public ProductService(ProductRepository productRepository, ProductEventRepository productEventRepository, ProductPublish productPublish) {
+		this.productRepository = productRepository;
+		this.productEventRepository = productEventRepository;
 		this.productPublish = productPublish;
 	}
 	
 	public List<Product> findByCategoryId(long categoryId){
-		return this.productMapper.findByCategoryId(categoryId);
+		// return this.productMapper.findByCategoryId(categoryId);
+		return this.productRepository.findProductByCategoryId(categoryId);
 	}
 	
 	public List<Product> findProductOnSale(){
-		return this.productMapper.findProductOnSale();
+		// return this.productMapper.findProductOnSale();
+		return this.productRepository.findProductBySalePercentageGreaterThan(0);
 	}
 	
 	public Product findById(long id) {
-		Product product = this.productMapper.findById(id);
-		return product;
+		// return this.productMapper.findById(id);
+		return this.productRepository.findById(id);
 	}
 	
 	public List<Product> getAllProducts(){
-		return this.productMapper.getAllProducts();
+		// return this.productMapper.getAllProducts();
+		return this.productRepository.findByActive("active");
 	}
 	
 	public boolean addProductAmountAndCreatePublishProductEvent(OrderEvent orderEvent) {
@@ -130,7 +138,7 @@ public class ProductService {
 	
 	@Transactional
 	public void subtractProductAmountAndCreatePublishProductAmountSubtractedEvent(String txId, List<OrderProduct> orderProducts) throws Exception {
-		//ProductEvent 생성,발행 쪼개
+		// ProductEvent 생성,발행 쪼개  
 		for(OrderProduct orderProduct : orderProducts) {
 			Product product = this.findById(orderProduct.getId());
 			this.subtractProductAmount(orderProduct, product);
@@ -142,8 +150,8 @@ public class ProductService {
 	
 	@Transactional
 	public void createPublishProductAmountSubtractFailedEvent(String txId, List<OrderProduct> orderProducts) throws Exception{
-		//복수 건을 처리하는 경우 실패시 이벤트 로그는 모든 제품에 대해서 남기고 실패 메세지 발송은 단건만 한다. 
-		//오더에서 txId로 식별이 가능하기 때문. 다른 도메인에서 제품과 일대다, 일대일 매칭에 관계에 따라 해법이 다를 수 있.
+		// 복수 건을 처리하는 경우 실패시 이벤트 로그는 모든 제품에 대해서 남기고 실패 메세지 발송은 단건만 한다. 
+		// 오더에서 txId로 식별이 가능하기 때문. 다른 도메인에서 제품과 일대다, 일대일 매칭에 관계에 따라 해법이 다를 수 있음.
 		ProductEvent productEvent = null;
 		for(OrderProduct orderProduct : orderProducts) {
 			productEvent = this.convertProductToProductEvent(txId, orderProduct.getId(), ProductEventType.ProductAmountSubtractFailed);
@@ -166,16 +174,39 @@ public class ProductService {
 	
 	public void subtractProductAmount(OrderProduct orderProduct, Product product) throws Exception{
 		this.subtractProductAmountValidationCheck(orderProduct, product);
-		this.productMapper.subtractProductAmount(orderProduct.getId(), orderProduct.getQuantity());
+		// this.productMapper.subtractProductAmount(orderProduct.getId(), orderProduct.getQuantity());
+		product.setAmount(product.getAmount() - orderProduct.getQuantity());
+		this.productRepository.save(product);
 	}
 	
 	public void addProductAmount(OrderProduct orderProduct) throws Exception{
-		this.productMapper.addProductAmount(orderProduct.getId(), orderProduct.getQuantity());
+		// this.productMapper.addProductAmount(orderProduct.getId(), orderProduct.getQuantity());
+
+		// Product product = new Product();
+		// product.setId(orderProduct.getId());
+		// product.setName(orderProduct.getName());
+		// product.setCategoryId(orderProduct.getCategoryId());
+		// product.setActive(orderProduct.getActive());
+		// product.setAmount(orderProduct.getAmount() + orderProduct.getQuantity());
+		// product.setOriginalPrice(orderProduct.getOriginalPrice());
+		// product.setSalePercentage(orderProduct.getSalePercentage());
+		// product.setSalePrice(orderProduct.getSalePrice());
+		// product.setResultPrice(orderProduct.getResultPrice());
+		// product.setImg(orderProduct.getImg());
+		Product product = productRepository.findById(orderProduct.getId());
+		product.setAmount(orderProduct.getAmount() + orderProduct.getQuantity());
+		product.setActive("active");
+
+		this.productRepository.save(product);
 	} 
 	
 	public void setProductinActive(long id) throws Exception {
 		this.setProductinActiveValidationCheck();
-		this.productMapper.setProductInactive(id);
+		// this.productMapper.setProductInactive(id);
+
+		Product product = productRepository.findById(id);
+		product.setActive("inactive");
+		this.productRepository.save(product);
 	}
 	
 	public void createPublishProductEvent(String txId, long id, ProductEventType productEventType) {
@@ -185,7 +216,8 @@ public class ProductService {
 	}
 	
 	public void createProductEvent(ProductEvent productEvent) {
-		this.productMapper.createProductEvent(productEvent);
+		// this.productMapper.createProductEvent(productEvent);
+		this.productEventRepository.save(productEvent);
 	}
 	
 	public void publishProductEvent(ProductEvent productEvent) {
@@ -195,10 +227,12 @@ public class ProductService {
 	public ProductEvent convertProductToProductEvent(String txId, long id, ProductEventType productEventType) {
 		log.info("in service txId : {}", txId);
 		
-		Product product = this.productMapper.findById(id);
+		// Product product = this.productMapper.findById(id);
+		Product product = this.productRepository.findById(id);
+		product.setCategoryName("Temporary");
 		
 		ProductEvent productEvent = new ProductEvent();
-		productEvent.setId(this.productMapper.getProductEventId());
+		// productEvent.setId(this.productMapper.getProductEventId());
 		productEvent.setDomain(domain);
 		productEvent.setProductId(product.getId());
 		productEvent.setEventType(productEventType);
@@ -206,7 +240,7 @@ public class ProductService {
 				, product.getCategoryName(), product.getActive(), product.getOriginalPrice(), product.getSalePercentage()
 				, product.getSalePrice(), product.getResultPrice(), product.getAmount(), product.getImg()));
 		productEvent.setTxId(txId);
-		productEvent.setCreatedAt(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+		productEvent.setCreatedAt(LocalDateTime.now());
 		
 		log.info("in service productEvent : {}", productEvent.toString());
 		
@@ -218,8 +252,9 @@ public class ProductService {
 			throw new Exception();
 		if(orderProduct.getQuantity() == 0)
 			throw new Exception();
-		//앞에 productAmountSubtract가 있어야 처리 아니면 안처리 
-		if(this.productMapper.findProductEvent(orderProduct.getId(), txId, eventType) == null)
+		// 앞에 productAmountSubtract가 있어야 처리
+		// if(this.productMapper.findProductEvent(orderProduct.getId(), txId, eventType) == null)
+		if(this.findProductEvent(orderProduct.getId(), txId, eventType) == null)
 			throw new Exception();
 	}
 	
@@ -231,11 +266,13 @@ public class ProductService {
 	}
 	
 	public List<ProductEvent> getProductEvent(){
-		return this.productMapper.getProductEvent();
+		// return this.productMapper.getProductEvent();
+		return this.productEventRepository.findAll();
 	}
 	
-	public ProductEvent findProductEvent(long id, String txId, String eventType) {
-		return this.productMapper.findProductEvent(id, txId, eventType);
+	public ProductEvent findProductEvent(long productId, String txId, String eventType) {
+		// return this.productMapper.findProductEvent(id, txId, eventType);
+		return this.productEventRepository.findProductEventByProductIdAndTxIdAndEventType(productId, txId, eventType);
 	}
 	
 }

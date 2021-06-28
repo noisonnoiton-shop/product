@@ -1,5 +1,8 @@
 package com.skcc.product.publish;
 
+import com.skcc.product.event.channel.ProductOutputChannel;
+import com.skcc.product.event.message.ProductEvent;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,9 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-
-import com.skcc.product.event.channel.ProductOutputChannel;
-import com.skcc.product.event.message.ProductEvent;
 
 @Component
 @EnableBinding(ProductOutputChannel.class)
