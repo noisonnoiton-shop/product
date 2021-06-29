@@ -36,7 +36,7 @@ public class ProductController {
 	}
 	
 	@GetMapping(value="/products/sale")
-	public List<Product> findByCategoryId(){
+	public List<Product> findProductOnSale(){
 		return this.productService.findProductOnSale();
 	}
 	
