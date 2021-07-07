@@ -8,10 +8,10 @@ public interface ProductInputChannel {
 	String orderCreated = "orderCreated";
 	String orderCanceled = "orderCanceled";
 	
-	@Input(ProductInputChannel.orderCreated)
+	// @Input(ProductInputChannel.orderCreated)
 	SubscribableChannel orderCreated();
 	
-	@Input(ProductInputChannel.orderCanceled)
+	// @Input(ProductInputChannel.orderCanceled)
 	SubscribableChannel orderCanceled();
 	
 }

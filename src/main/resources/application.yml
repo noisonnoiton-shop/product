@@ -48,44 +48,60 @@ spring:
   #   initialization-mode: always
   #   continue-on-error: true
 
+  rabbitmq:
+    addresses: localhost
+    username: labs
+    password: awesome-rabbitmq
   cloud:
     stream:
-      binders:
-        rabbitmq:
-          type: rabbit
-          environment:
-            spring:
-              rabbitmq:
-                #host: rabbitmq
-                host: localhost
-                port: 5672
-                username: labs
-                password: awesome-rabbitmq
       bindings:
-        orderCreated:
-          destination: orderExchange
-          group: product.orderCreated
-          content-type: application/json
-        orderCanceled:
-          destination: orderExchange
-          group: product.orderCanceled
-          content-type: application/json
-        ProductOutput:
-          destination: productExchange
+        productOutput:
+          destination: productTopic
           content-type: application/json
       rabbit:
         bindings:
-          orderCreated:
-            consumer:
-              autoBindDlq: true
-              bindingRoutingKey: order.OrderCreated.#
-          orderCanceled:
-            consumer:
-              autoBindDlq: true
-              bindingRoutingKey: order.OrderCanceled.#
-          ProductOutput:
+          productOutput:
             producer:
               routing-key-expression: headers['routeTo']
+
+  # cloud:
+  #   stream:
+  #     binders:
+  #       rabbitmq:
+  #         type: rabbit
+  #         environment:
+  #           spring:
+  #             rabbitmq:
+  #               #host: rabbitmq
+  #               host: localhost
+  #               port: 5672
+  #               username: labs
+  #               password: awesome-rabbitmq
+  #     bindings:
+  #       orderCreated:
+  #         destination: orderExchange
+  #         group: product.orderCreated
+  #         content-type: application/json
+  #       orderCanceled:
+  #         destination: orderExchange
+  #         group: product.orderCanceled
+  #         content-type: application/json
+  #       ProductOutput:
+  #         destination: productExchange
+  #         content-type: application/json
+  #     rabbit:
+  #       bindings:
+  #         orderCreated:
+  #           consumer:
+  #             autoBindDlq: true
+  #             bindingRoutingKey: order.OrderCreated.#
+  #         orderCanceled:
+  #           consumer:
+  #             autoBindDlq: true
+  #             bindingRoutingKey: order.OrderCanceled.#
+  #         ProductOutput:
+  #           producer:
+  #             routing-key-expression: headers['routeTo']
 
 management:
   endpoints:

@@ -9,6 +9,7 @@ import com.skcc.product.domain.Product;
 import com.skcc.product.event.message.ProductEvent;
 import com.skcc.product.event.message.ProductEventType;
 import com.skcc.product.event.message.ProductPayload;
+import com.skcc.product.producer.ProductProducer;
 import com.skcc.product.publish.ProductPublish;
 import com.skcc.product.repository.ProductEventRepository;
 import com.skcc.product.repository.ProductRepository;
@@ -23,15 +24,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ProductService {
 
-	// @Autowired
-	// private ProductMapper productMapper;
-
 	private ProductRepository productRepository;
 	private ProductEventRepository productEventRepository;
-	private ProductPublish productPublish;
 	
 	@Autowired
 	private ProductService productService;
+
+	@Autowired
+	private ProductProducer productProducer;
 	
 	private static final Logger log = LoggerFactory.getLogger(ProductService.class);
 
@@ -39,10 +39,9 @@ public class ProductService {
 	String domain;
 	
 	@Autowired
-	public ProductService(ProductRepository productRepository, ProductEventRepository productEventRepository, ProductPublish productPublish) {
+	public ProductService(ProductRepository productRepository, ProductEventRepository productEventRepository) {
 		this.productRepository = productRepository;
 		this.productEventRepository = productEventRepository;
-		this.productPublish = productPublish;
 	}
 	
 	public List<Product> findByCategoryId(long categoryId){
@@ -221,7 +220,8 @@ public class ProductService {
 	}
 	
 	public void publishProductEvent(ProductEvent productEvent) {
-		this.productPublish.send(productEvent);
+		// this.productPublish.send(productEvent);
+		this.productProducer.send(productEvent);
 	}
 	
 	public ProductEvent convertProductToProductEvent(String txId, long id, ProductEventType productEventType) {

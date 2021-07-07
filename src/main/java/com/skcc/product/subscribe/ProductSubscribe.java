@@ -9,8 +9,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.stereotype.Component;
 
-@Component
-@EnableBinding(ProductInputChannel.class)
+// @Component
+// @EnableBinding(ProductInputChannel.class)
 public class ProductSubscribe {
 
 	private ProductService productService;
@@ -20,12 +20,12 @@ public class ProductSubscribe {
 		this.productService = productService;
 	}
 	
-	@StreamListener(ProductInputChannel.orderCreated)
+	// @StreamListener(ProductInputChannel.orderCreated)
 	public void receiveOrderCreatedEvent(OrderEvent orderEvent) {
 		this.productService.subtractProductAmountAndCreatePublishProductEvent(orderEvent);
 	}
 	
-	@StreamListener(ProductInputChannel.orderCanceled)
+	// @StreamListener(ProductInputChannel.orderCanceled)
 	public void receiveOrderCanceledEvent(OrderEvent orderEvent) {
 		this.productService.addProductAmountAndCreatePublishProductEvent(orderEvent);
 	}

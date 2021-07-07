@@ -11,8 +11,8 @@ import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.integration.support.MessageBuilder;
 import org.springframework.stereotype.Component;
 
-@Component
-@EnableBinding(ProductOutputChannel.class)
+// @Component
+// @EnableBinding(ProductOutputChannel.class)
 public class ProductPublish {
 	
 	private ProductOutputChannel productOutputchannel;
